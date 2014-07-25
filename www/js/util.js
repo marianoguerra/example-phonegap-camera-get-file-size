@@ -68,9 +68,9 @@
         logNode.innerHTML = logNode.innerHTML + txt;
     }
 
-    log('Setting Up Button');
+    log('Setting Up Take Picture Button');
     takePictureBtn.addEventListener('click', onTakePictureClicked);
+    log('Setting Up Take Select Button');
     selectPictureBtn.addEventListener('click', onSelectPictureClicked);
-    log('Setting Up Device Ready');
 
 }(app, document, window, navigator));
