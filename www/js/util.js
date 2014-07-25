@@ -72,6 +72,5 @@
     takePictureBtn.addEventListener('click', onTakePictureClicked);
     selectPictureBtn.addEventListener('click', onSelectPictureClicked);
     log('Setting Up Device Ready');
-    document.addEventListener("deviceready", onDeviceReady, false);
 
 }(app, document, window, navigator));
