@@ -27,6 +27,12 @@ add code
 
 see commit history for details, the www/js/util.js contains almost all the code
 
+screenshot
+----------
+
+.. image:: https://raw.github.com/marianoguerra/example-phonegap-camera-get-file-size/master/screenshot.png
+   :width: 80%
+
 license
 -------
 
