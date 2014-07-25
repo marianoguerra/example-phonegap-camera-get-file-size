@@ -2,18 +2,8 @@
 (function (app, document, window, navigator) {
     'use strict';
     var takePictureBtn = document.getElementById('take-picture'),
-        logNode = document.getElementById('log'),
-        rootfs;
-
-    function onDeviceReady() {
-        log('Requesting File System');
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-    }
-
-    function gotFS(fileSystem) {
-        log('Got File System');
-        rootfs = fileSystem;
-    }
+        selectPictureBtn = document.getElementById('select-picture'),
+        logNode = document.getElementById('log');
 
     function gotFileEntry(fileEntry) {
         log('Got File Entry');
@@ -24,32 +14,53 @@
         log('File Info: name: ' + file.name + 'size: ' + file.size + ' bytes');
     }
 
-    function fail(evt) {
-        log('Fail');
+    function failCb(msg) {
+        return function (evt) {
+            log('Fail', msg); 
+            logErrorEvent(evt);
+        };
+    }
+
+    function logErrorEvent(evt) {
         log('Error: ' + evt.code);
         log('Error: ' + JSON.stringify(evt));
     }
 
+    function fail(evt) {
+        log('Fail');
+        logErrorEvent(evt);
+    }
+
     function getPicture(sourceType) {
-      function onSuccess(imageURI) {
-          var path = imageURI.slice(7);
-          log('Got Picture: ' + path);
-          rootfs.root.getFile(path, null, gotFileEntry, fail);
-      }
 
-      function onFail(message) {
-        log('Error getting picture: ' + message);
-      }
+        function onPathResolved(entry) {
+            log('Resolved Path', entry.fullPath);
+            gotFileEntry(entry);
+        }
 
-      navigator.camera.getPicture(onSuccess, onFail, {
-        quality: 50,
-        sourceType: sourceType,
-        destinationType: window.Camera.DestinationType.FILE_URI
-      });
+        function onSuccess(imageURI) {
+            log('Got Picture: ' + imageURI);
+            window.resolveLocalFileSystemURL(imageURI, onPathResolved,
+                                             failCb('Resolving File URI'));
+        }
+
+        function onFail(message) {
+            log('Error getting picture: ' + message);
+        }
+
+        navigator.camera.getPicture(onSuccess, onFail, {
+            quality: 50,
+            sourceType: sourceType,
+            destinationType: window.Camera.DestinationType.FILE_URI
+        });
     }
 
     function onTakePictureClicked() {
       getPicture(window.Camera.PictureSourceType.CAMERA);
+    }
+
+    function onSelectPictureClicked() {
+      getPicture(window.Camera.PictureSourceType.PHOTOLIBRARY);
     }
 
     function log() {
@@ -59,6 +70,7 @@
 
     log('Setting Up Button');
     takePictureBtn.addEventListener('click', onTakePictureClicked);
+    selectPictureBtn.addEventListener('click', onSelectPictureClicked);
     log('Setting Up Device Ready');
     document.addEventListener("deviceready", onDeviceReady, false);
 
