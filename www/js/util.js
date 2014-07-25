@@ -2,8 +2,8 @@
 (function (app, document, window, navigator) {
     'use strict';
     var takePictureBtn = document.getElementById('take-picture'),
-        selectPictureBtn = document.getElementById('select-picture'),
-        logNode = document.getElementById('log');
+    selectPictureBtn = document.getElementById('select-picture'),
+    logNode = document.getElementById('log');
 
     function gotFileEntry(fileEntry) {
         log('Got File Entry');
@@ -56,11 +56,11 @@
     }
 
     function onTakePictureClicked() {
-      getPicture(window.Camera.PictureSourceType.CAMERA);
+        getPicture(window.Camera.PictureSourceType.CAMERA);
     }
 
     function onSelectPictureClicked() {
-      getPicture(window.Camera.PictureSourceType.PHOTOLIBRARY);
+        getPicture(window.Camera.PictureSourceType.PHOTOLIBRARY);
     }
 
     function log() {
